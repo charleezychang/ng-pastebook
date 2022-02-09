@@ -1,1 +1,37 @@
-<p>login works!</p>
+<div class="container">
+    <div class="left">
+        <h1>pastebook</h1>
+        <p>Pastebook helps you connect and share with the people in your life.</p>
+    </div>
+    <div class="right">
+        <div class="box">
+            <div class="login-header">
+                <div class="log-in">
+                    Log In to Pastebook
+                </div>
+            </div>
+            <div class="user-form">
+                <div class="input-fields">
+                    <form class="login-form" [formGroup]="userForm" (ngSubmit)="submitForm()" >
+                        <div class="input-email">
+                            <input type="text" placeholder="Email" name="email" formControlName="email" />
+                            <p *ngIf="email?.touched && email?.invalid">
+                                <span *ngIf="email?.errors?.['required']">Email address is required.</span>
+                                <span *ngIf="email?.errors?.['pattern']">Invalid email address. Format: sample@sample.com</span>
+                            </p>
+                        </div>
+                        <div class="input-password">
+                            <input type="password" placeholder="Password" name="password" formControlName="password" />
+                            <p *ngIf="password?.touched && password?.invalid">
+                                <span *ngIf="password?.errors?.['required'] || password?.errors?.['minLength']">Password is required, it should be at least 8 characters.</span>
+                            </p>
+                        </div>
+                        <div class="login-button">
+                            <input type="submit" class="btn" value="Log In" [disabled]="userForm.invalid"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

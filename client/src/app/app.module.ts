@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { HeaderComponent } from './header/header.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HeaderComponent } from './header/header.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
