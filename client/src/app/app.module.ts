@@ -7,6 +7,10 @@ import { MainComponent } from './main/main.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FriendsComponent } from './friends/friends.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LoginComponent } from './login/login.component';
+import { NewsfeedComponent } from './newsfeed/newsfeed.component';
+import { TimelineComponent } from './timeline/timeline.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +18,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MainComponent,
     ProfileComponent,
     FriendsComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginComponent,
+    NewsfeedComponent,
+    TimelineComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
