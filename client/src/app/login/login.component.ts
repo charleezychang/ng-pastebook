@@ -62,6 +62,8 @@ export class LoginComponent implements OnInit {
 
     this.service.postLogin(this.loginModelObj)
     .subscribe(res=>{
+      console.log(res.toString());
+      
       alert("yazzz")
       this.router.navigateByUrl("/");
 
