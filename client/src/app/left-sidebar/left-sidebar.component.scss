@@ -1,9 +1,12 @@
+:host
+{
+    width: 20%;
+}
+
 #sidebar-container {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    margin: 5rem 1rem 1rem 1rem;
-    width: 20%;
+    margin: 1rem;
 }
 a {
     text-decoration: none;

@@ -1,1 +1,69 @@
-<p>newsfeed works!</p>
+<div class="create-post-container">
+    <div class="create-post">
+        <img class="create-post-image" src="../../assets/sample-profile.png" />
+        <input type="text" placeholder="What's on your mind?" maxlength="1000" [(ngModel)]="newPostContent" />
+        <input type="file" value="Upload" class="hidden" id="file" accept=".png, .jpg, .jpeg .gif"
+            (change)="handleFileSelect($event)" />
+        <label for="file">Upload</label>
+        <button class="create-post-btn">Post</button>
+        <button class="create-post-btn" (click)="resetCreatePost()">Reset</button>
+    </div>
+    <div class="post-content">
+        <p [ngClass]="{'hidden':!newPostContent}" [ngStyle]="{paddingBottom: '0.5rem'}">{{newPostContent}}</p>
+    </div>
+    <div>
+        <img class="post-image" [src]="base64Image" [ngClass]="{'hidden':!base64Image}" />
+    </div>
+</div>
+
+
+<div class="post-card">
+    <div class="post-header">
+        <img class="post-header-image" src="../../assets/sample-profile.png" />
+        <p>Charles Chang</p>
+    </div>
+    <div class="post-body">
+        <div class="post-content">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laudantium tenetur asperiores quia
+                vitae, aliquam quisquam dignissimos voluptas amet officia optio in maxime voluptates soluta obcaecati ab
+                possimus at reprehenderit?</p>
+        </div>
+        <div>
+            <img class="post-image" src="../../assets/dino-sample.jpg" />
+        </div>
+    </div>
+</div>
+
+<div class="post-card">
+    <div class="post-header">
+        <img class="post-header-image" src="../../assets/sample-profile.png" />
+        <p>Charles Chang</p>
+    </div>
+    <div class="post-body">
+        <div class="post-content">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laudantium tenetur asperiores quia
+                vitae, aliquam quisquam dignissimos voluptas amet officia optio in maxime voluptates soluta obcaecati ab
+                possimus at reprehenderit?</p>
+        </div>
+        <div>
+            <img class="post-image" src="../../assets/dino-sample.jpg" />
+        </div>
+    </div>
+</div>
+
+<div class="post-card">
+    <div class="post-header">
+        <img class="post-header-image" src="../../assets/sample-profile.png" />
+        <p>Charles Chang</p>
+    </div>
+    <div class="post-body">
+        <div class="post-content">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laudantium tenetur asperiores quia
+                vitae, aliquam quisquam dignissimos voluptas amet officia optio in maxime voluptates soluta obcaecati ab
+                possimus at reprehenderit?</p>
+        </div>
+        <div>
+            <img class="post-image" src="../../assets/dino-sample.jpg" />
+        </div>
+    </div>
+</div>
