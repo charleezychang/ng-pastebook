@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
 import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
