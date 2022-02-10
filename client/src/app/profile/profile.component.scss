@@ -9,7 +9,7 @@
     box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 1px;
     background-color: rgb(255, 255, 255);
     padding-bottom: 1rem;
-    margin-top: 5rem;
+    margin-top: 4rem;
 }
 .profile-cover {
     margin-bottom: .75rem;
@@ -56,8 +56,8 @@
 }
 .profile-picture-with-name {
     text-align: center;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
+    // padding-bottom: 0.5rem;
+    // padding-top: 0.5rem;
 }
 
 .page {
@@ -94,7 +94,7 @@
         }
         .profile-intro-text {
             font-weight: bold;
-            // padding-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
         }
         .add-bio{
             height: 2rem;
@@ -108,7 +108,7 @@
             cursor: pointer;
         }
         .user-info {
-            padding: 1rem 0;
+            padding: 1rem 0 0.5rem 0;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -123,6 +123,13 @@
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+}
+.user-info-details mat-icon {
+    color: rgb(177, 177, 177);
+    font-size: 1.25rem;
+    text-align: center;
+    // margin-top: 0.3rem;
+    padding-top: 0.1rem;
 }
 
         .bio-content {
@@ -163,12 +170,15 @@
                 flex-grow: 0.25;
                 font-size: 0.85rem;
             }
-            .grid-pictures {
-                display: flex;
-                flex-wrap: wrap;
-                border-radius: .5rem;
-                justify-content: flex-start;
-                gap: calc((100% - 95%)/2);
+            .grid-pictures p {
+                // display: flex;
+                // flex-wrap: wrap;
+                // border-radius: .5rem;
+                // justify-content: flex-start;
+                // gap: calc((100% - 95%)/2);
+                font-size: 0.8rem;
+                margin: 0;
+                padding: 0 0 0 0.5rem;
             }
             
             .pic {
@@ -190,7 +200,7 @@
             .terms {
                 margin-top: 0.5rem;
                 padding: 0 0.5rem;
-                font-size: 0.83vw;
+                font-size: 0.9vw;
                 margin-bottom: 1rem;
             }
             .terms p {
@@ -274,8 +284,8 @@
     justify-items: center;
     text-align: justify;
     margin: 0 0.5rem 0.75rem 0.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(0,0,0,0.2);
+    padding-bottom: 0.5rem;
+    // border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 .user-bio p {
     margin: 0;

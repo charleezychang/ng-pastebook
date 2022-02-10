@@ -2,6 +2,7 @@
 <div class="profile-top">
     <div class="profile-cover">
         <div class="profile-picture">
+            <img src={{profilePic}} id="uploaded-profile-pic">
                 <!-- <div class="change-profile-pic-icon">
                     <label htmlFor="upload-image" class="custom-file-upload" >
                     </label>
@@ -10,7 +11,7 @@
         </div>
     </div>
     <div class="profile-picture-with-name">
-        <div class="profile-name">Kim Minjeong</div>
+        <div class="profile-name">Son Chaeyoung</div>
     </div>
 </div>
 <div class="page">
@@ -20,28 +21,33 @@
                 <div class="profile-intro-text">
                     Intro
                 </div>
-                    <div class="user-bio">
-                        <p></p>
-                    </div>
-                    <button class="add-bio" >
-                        Add Bio
-                    </button>
-                    <p></p>
-                    <button class="add-bio" >
-                        Edit Bio
-                    </button>
+                <div class="user-bio">
+                    Stan Twice for clearer skin :)
+                </div>
+                <button class="add-bio" >
+                    Edit Bio
+                </button>
                     <div class="user-info">
                         <div class="user-info-details">
+                            <mat-icon>email</mat-icon>
+                            sonchaeyoung@gmail.com
                         </div>
                         <div class="user-info-details">
+                            <mat-icon>contacts</mat-icon>
+                            +639xx-xxx-xxxx
                         </div>
                         <div class="user-info-details">
+                            <mat-icon>cake</mat-icon>
+                            April 23, 1999
                         </div>
                         <div class="user-info-details">
+                            <mat-icon>wc</mat-icon>
+                            Female
                         </div>
                     </div>
-                    <button class="edit-details" >Edit Details
-                    </button>
+                <button class="edit-details" >
+                    Edit Details
+                </button>
             </div>
             <div class="for-sticky">
                 <div class="photo-section">
@@ -51,7 +57,7 @@
                         </div>
                     </div>
                     <div class="grid-pictures">
-                        
+                        <p>No albums.</p>
                     </div>
                 </div>
                 <div class="terms">
@@ -61,23 +67,23 @@
             </div>
         </div>
         <div class="right-side">
-                <div class="posts-section">
-                    <div class="post-icon">
-                        <!-- <img src={userProfile.ImageSrc} class="post-profile-pic" alt="post-profile-pic" /> -->
-                    </div>
-                    <div class="post-space">
-                        <button class="post-button" >
-                            What's on your mind?
-                        </button>
-                    </div>
+            <div class="posts-section">
+                <div class="post-icon">
+                    <img src={{profilePic}} class="post-profile-pic" alt="post-profile-pic" />
                 </div>
-                    <div class="main-posts">
-                        <div class="main-post-title">Posts</div>
-                    </div>
-                    <div class='caught-up'>
-                        <div >You're all caught up.</div>
-                        <div ><i>You've seen all new posts from the past 2 weeks.</i></div>
-                    </div>
+                <div class="post-space">
+                    <button class="post-button" >
+                        What's on your mind?
+                    </button>
+                </div>
+            </div>
+            <div class="main-posts">
+                <div class="main-post-title">Posts</div>
+            </div>
+            <div class='caught-up'>
+                <div >You're all caught up.</div>
+                <div ><i>You've seen all new posts from the past 2 weeks.</i></div>
+            </div>
         </div>
     </div>
 </div> 
