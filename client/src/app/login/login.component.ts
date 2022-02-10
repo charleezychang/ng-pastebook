@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CurrentUserService } from '../current-user.service';
 import { FetchService } from './fetch.service';
 import { LoginModel } from './login.model';
 
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
   isValidForm: boolean = false;
 
   loginModelObj: LoginModel = new LoginModel();
-  
+
   userForm = new FormGroup({
     Email: new FormControl('', [
       Validators.required,
@@ -27,23 +28,18 @@ export class LoginComponent implements OnInit {
     ])
   });
 
-  constructor(private http: HttpClient, private router: Router, private formBuilder: FormBuilder, private service: FetchService ) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private service: FetchService,
+    private currentUser: CurrentUserService) { }
 
   ngOnInit(): void {
+    this.currentUser.checkLocalStorage();
     this.userForm = this.formBuilder.group({
-      Email : [''],
-      Password : ['']
+      Email: [''],
+      Password: ['']
     })
   }
-
-  // submitForm() {
-  //   this.isValidForm = false;
-  //    if (this.userForm.invalid) {
-  //       return;
-  //    }
-  //    this.isValidForm = true;
-  //    this.router.navigateByUrl("/");
-  // }
 
   get Email() {
     return this.userForm.get('Email');
@@ -53,19 +49,15 @@ export class LoginComponent implements OnInit {
     return this.userForm.get('Password');
   }
 
-  // postLoginDetails() {
   submitForm() {
     this.loginModelObj.Email = this.userForm.value.Email;
     this.loginModelObj.Password = this.userForm.value.Password;
 
-    console.log(this.loginModelObj)
-
     this.service.postLogin(this.loginModelObj)
-    .subscribe(res=>{
-      alert("yazzz")
-      this.router.navigateByUrl("/");
-
-    })
+      .subscribe(res => {
+        localStorage.setItem('JSONWebToken', res)
+        this.currentUser.isLoggedIn$.next(true);
+      })
   }
 
 }
