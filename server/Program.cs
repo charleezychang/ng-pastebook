@@ -16,6 +16,7 @@
         app.UseFileServer();
         app.UseRouting();
         app.MapControllers();
-        app.Run("http://*:" + Environment.GetEnvironmentVariable("PORT"));
+        // app.Run("http://*:" + Environment.GetEnvironmentVariable("PORT"));
+        app.Run("http://localhost:5000");
     }
 }
