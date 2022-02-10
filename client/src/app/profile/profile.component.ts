@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
+  profilePic: string = "../assets/chaeyoung.jpg"
+
   constructor() { }
 
   ngOnInit(): void {

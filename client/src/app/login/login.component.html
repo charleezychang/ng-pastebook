@@ -14,16 +14,16 @@
                 <div class="input-fields">
                     <form class="login-form" [formGroup]="userForm" (ngSubmit)="submitForm()" >
                         <div class="input-email">
-                            <input type="text" placeholder="Email" name="email" formControlName="email" />
-                            <p *ngIf="email?.touched && email?.invalid">
-                                <span *ngIf="email?.errors?.['required']">Email address is required.</span>
-                                <span *ngIf="email?.errors?.['pattern']">Invalid email address. Format: sample@sample.com</span>
+                            <input type="text" placeholder="Email" name="Email" formControlName="Email" />
+                            <p *ngIf="Email?.touched && Email?.invalid">
+                                <span *ngIf="Email?.errors?.['required']">Email address is required.</span>
+                                <span *ngIf="Email?.errors?.['pattern']">Invalid email address. Format: sample@sample.com</span>
                             </p>
                         </div>
                         <div class="input-password">
-                            <input type="password" placeholder="Password" name="password" formControlName="password" />
-                            <p *ngIf="password?.touched && password?.invalid">
-                                <span *ngIf="password?.errors?.['required'] || password?.errors?.['minLength']">Password is required, it should be at least 8 characters.</span>
+                            <input type="password" placeholder="Password" name="Password" formControlName="Password" />
+                            <p *ngIf="Password?.touched && Password?.invalid">
+                                <span *ngIf="Password?.errors?.['required'] || Password?.errors?.['minLength']">Password is required, it should be at least 8 characters.</span>
                             </p>
                         </div>
                         <div class="login-button">
