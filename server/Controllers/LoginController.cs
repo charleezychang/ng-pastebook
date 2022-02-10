@@ -44,10 +44,10 @@ public class LoginController : Controller
     }
 
     [HttpPost]
-    [Route("/getcurrentprofile")]
-    public IActionResult GetUsername([FromHeader(Name = "AuthToken")] string tokenString)
+    [Route("/getcurrent")]
+    public IActionResult GetCurrentUser([FromHeader(Name = "AuthToken")] string tokenString)
     {
-        UserProfileModel UserInfo = new UserProfileModel();
+        Dictionary<string, dynamic> CurrentUser = new Dictionary<string, dynamic>();
         int userId = Int32.Parse(Authenticate.GetOwnerIdFromToken(tokenString));
         using (var db = Database.OpenDatabase())
         {
@@ -58,14 +58,28 @@ public class LoginController : Controller
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                   UserInfo.OwnerId = reader.GetInt32(1);
-                   UserInfo.Username = reader.GetString(2);
-                   UserInfo.Bio = reader.GetString(3);
-                   UserInfo.ImageSrc = reader.GetString(4);
+                    CurrentUser.Add("Username", reader.GetString(2));
+                    CurrentUser.Add("ImageSrc", reader.GetString(4));
                 }
             }
         }
-        return Ok(UserInfo);
+
+        using (var db = Database.OpenDatabase())
+        {
+            using (var command = db.CreateCommand())
+            {
+                command.CommandText = $@"SELECT * FROM Users WHERE Id=@Id;";
+                command.Parameters.AddWithValue("@Id", userId);
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    CurrentUser.Add("FirstName", reader.GetString(2));
+                    CurrentUser.Add("LastName", reader.GetString(3));
+                }
+            }
+        }
+
+        return Ok(CurrentUser);
     }
 
 }

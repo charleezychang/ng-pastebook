@@ -1,6 +1,6 @@
 <div class="create-post-container">
     <div class="create-post">
-        <img class="create-post-image" src="../../assets/sample-profile.png" />
+        <img class="create-post-image" [src]="currentUser.ImageSrc" />
         <input type="text" placeholder="What's on your mind?" maxlength="1000" [(ngModel)]="newPostContent" />
         <input type="file" value="Upload" class="hidden" id="file" accept=".png, .jpg, .jpeg .gif"
             (change)="handleFileSelect($event)" />
@@ -20,7 +20,7 @@
 <div class="post-card">
     <div class="post-header">
         <img class="post-header-image" src="../../assets/sample-profile.png" />
-        <p>Charles Chang</p>
+        <p>{{currentUser.FirstName}}</p>
     </div>
     <div class="post-body">
         <div class="post-content">

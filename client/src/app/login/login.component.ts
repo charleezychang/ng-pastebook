@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit {
       .subscribe(res => {
         localStorage.setItem('JSONWebToken', res)
         this.currentUser.isLoggedIn$.next(true);
+        this.currentUser.getCurrentUser();
       })
   }
 

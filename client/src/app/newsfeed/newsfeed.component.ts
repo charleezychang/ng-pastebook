@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CurrentUserService } from '../current-user.service';
 
 @Component({
   selector: 'app-newsfeed',
@@ -9,10 +10,19 @@ export class NewsfeedComponent implements OnInit {
   isValidFileSize: boolean = true;
   newPostContent: string = '';
   base64Image: string = "";
+  currentUser = {
+    FirstName: '',
+    LastName: '',
+    Username: '',
+    ImageSrc: '',
+  }; 
 
-  constructor() { }
+  constructor(private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
+    this.currentUserService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    })
   }
 
 
