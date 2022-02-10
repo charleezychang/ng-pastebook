@@ -1,10 +1,10 @@
 <div id="sidebar-container">
-    <a routerLink="/:username">
+    <a routerLink="/{{currentUser.Username}}">
         <div class='sidebar-row'>
             <div class='sidebar-images'>
-                <img class='sidebar-icon' alt='' />
+                <img class='sidebar-icon' alt='' [src]="currentUser.ImageSrc" />
             </div>
-            <p class='sidebar-text'>Name</p>
+            <p class='sidebar-text'>{{currentUser.FirstName}} {{currentUser.LastName}}</p>
         </div>
     </a>
     <a routerLink="/friends">

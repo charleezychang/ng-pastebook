@@ -7,13 +7,22 @@ import { CurrentUserService } from '../current-user.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  currentUser = {
+    FirstName: '',
+    LastName: '',
+    Username: '',
+    ImageSrc: '',
+  };
 
-  constructor(private currentUser: CurrentUserService) { }
+  constructor(private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
+    this.currentUserService.currentUser$.subscribe((user) => {
+      this.currentUser = user;
+    })
   }
 
   onLogout() {
-    this.currentUser.onLogout();
+    this.currentUserService.onLogout();
   }
 }
