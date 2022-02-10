@@ -1,1 +1,30 @@
-<p>friends works!</p>
+<app-header></app-header>
+<div class="holder-two">
+    <div class="sidebar-left">
+        <app-left-sidebar></app-left-sidebar>
+    </div>
+    <div class="body-right">
+        <div class='global-holder'>
+            <div class='friends-holder'>
+                <div class='friendlist-text'>
+                    <span class='text-friend'>Friends</span>
+                </div>
+                <div class='search-friend'>
+                    <input type="search" placeholder='Search' class='search-field' />
+                </div>
+            </div>
+
+            <div className='box-wrapper'>
+                <div class='friend-profile-box'>
+                    <div class='friend-profile-pic'>
+                        <a routerLink="/:username"><img class='image-sample-friend' />
+                        </a>
+                    </div>
+                    <div class='friend-name'>
+                        <a routerLink="/:username" class='flname-link'><span class='flname'>Hakuna Matata</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
