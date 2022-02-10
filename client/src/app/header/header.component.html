@@ -3,7 +3,7 @@
         <a routerLink=""><p>pastebook<p></a>
     </div>
     <div id="navigation-container">
-        <a routerLink="/:username">
+        <a routerLink="/{{user.Username}}">
             <div class="header-profile-pic">
                 <img class="icon header-profile-pic" [src]="user.ImageSrc"/>
                 <p>{{user.FirstName}}</p>
