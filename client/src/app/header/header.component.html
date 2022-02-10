@@ -5,8 +5,8 @@
     <div id="navigation-container">
         <a routerLink="/:username">
             <div class="header-profile-pic">
-                <img class="icon header-profile-pic" />
-                <p>Name</p>
+                <img class="icon header-profile-pic" [src]="user.ImageSrc"/>
+                <p>{{user.FirstName}}</p>
             </div>
         </a>
         <a (click)="onLogout()">

@@ -16,54 +16,38 @@
     </div>
 </div>
 
+<div *ngFor="let post of newsfeedPosts, let i = index">
+    <div class="post-card" *ngIf="i+1 === newsfeedPosts.length" #lastPost>
+        <div class="post-header">
+            <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+            <a [routerLink]="post.Username">
+                <p>{{post.FirstName}} {{post.LastName}}</p>
+            </a>
+        </div>
+        <div class="post-body">
+            <div class="post-content">
+                <p>{{post.Content}}</p>
+            </div>
+            <div>
+                <img class="post-image" [src]="post.ImageSrc" />
+            </div>
+        </div>
+    </div>
 
-<div class="post-card">
-    <div class="post-header">
-        <img class="post-header-image" src="../../assets/sample-profile.png" />
-        <p>{{currentUser.FirstName}}</p>
-    </div>
-    <div class="post-body">
-        <div class="post-content">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laudantium tenetur asperiores quia
-                vitae, aliquam quisquam dignissimos voluptas amet officia optio in maxime voluptates soluta obcaecati ab
-                possimus at reprehenderit?</p>
+    <div class="post-card" *ngIf="i+1 !== newsfeedPosts.length">
+        <div class="post-header">
+            <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+            <a [routerLink]="post.Username">
+                <p>{{post.FirstName}} {{post.LastName}}</p>
+            </a>
         </div>
-        <div>
-            <img class="post-image" src="../../assets/dino-sample.jpg" />
-        </div>
-    </div>
-</div>
-
-<div class="post-card">
-    <div class="post-header">
-        <img class="post-header-image" src="../../assets/sample-profile.png" />
-        <p>Charles Chang</p>
-    </div>
-    <div class="post-body">
-        <div class="post-content">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laudantium tenetur asperiores quia
-                vitae, aliquam quisquam dignissimos voluptas amet officia optio in maxime voluptates soluta obcaecati ab
-                possimus at reprehenderit?</p>
-        </div>
-        <div>
-            <img class="post-image" src="../../assets/dino-sample.jpg" />
-        </div>
-    </div>
-</div>
-
-<div class="post-card">
-    <div class="post-header">
-        <img class="post-header-image" src="../../assets/sample-profile.png" />
-        <p>Charles Chang</p>
-    </div>
-    <div class="post-body">
-        <div class="post-content">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laudantium tenetur asperiores quia
-                vitae, aliquam quisquam dignissimos voluptas amet officia optio in maxime voluptates soluta obcaecati ab
-                possimus at reprehenderit?</p>
-        </div>
-        <div>
-            <img class="post-image" src="../../assets/dino-sample.jpg" />
+        <div class="post-body">
+            <div class="post-content">
+                <p>{{post.Content}}</p>
+            </div>
+            <div>
+                <img class="post-image" [src]="post.ImageSrc" />
+            </div>
         </div>
     </div>
 </div>

@@ -2,9 +2,9 @@
     <a routerLink="/:username">
         <div class='sidebar-row'>
             <div class='sidebar-images'>
-                <img class='sidebar-icon' alt='' />
+                <img class='sidebar-icon' alt='' [src]="user.ImageSrc"/>
             </div>
-            <p class='sidebar-text'>Name</p>
+            <p class='sidebar-text'>{{user.FirstName}} {{user.LastName}}</p>
         </div>
     </a>
     <a routerLink="/friends">
