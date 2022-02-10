@@ -12,6 +12,8 @@ import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
