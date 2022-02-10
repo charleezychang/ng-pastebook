@@ -118,3 +118,13 @@ input[type="text"]:focus
     object-fit: cover;
     margin-bottom: 1rem;
 }
+
+a
+{
+    text-decoration: none;
+    color: black
+}
+a:hover
+{
+    text-decoration: underline;
+}
