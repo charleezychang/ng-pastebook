@@ -13,6 +13,12 @@
     <div class="profile-picture-with-name">
         <div class="profile-name">Son Chaeyoung</div>
     </div>
+    <div class="add-friend">
+        <button id="friends-profile-header" *ngIf="status == 'Friends'">Friends</button>
+        <button id="add-friend-button" *ngIf="status == 'NotFriends'">Add Friend</button>
+        <button id="accept" *ngIf="status == 'PendingAccept'">Accept</button>
+        <button id="pending-friend-request" *ngIf="status=='PendingRequest'">Pending</button>
+    </div>
 </div>
 <div class="page">
     <div class="profile-body">
@@ -50,16 +56,6 @@
                 </button>
             </div>
             <div class="for-sticky">
-                <div class="photo-section">
-                    <div class="photo-title">
-                        <div class="photos-text">Albums</div>
-                        <div class="photos-link">
-                        </div>
-                    </div>
-                    <div class="grid-pictures">
-                        <p>No albums.</p>
-                    </div>
-                </div>
                 <div class="terms">
                     <p>Privacy • Terms • Advertising • Ad Choices • Cookies • More </p>
                     <p>© 2022</p>
