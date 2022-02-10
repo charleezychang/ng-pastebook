@@ -14,6 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
+import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {MatIconModule} from '@angular/material/icon';
     LoginComponent,
     NewsfeedComponent,
     TimelineComponent,
-    HeaderComponent
+    HeaderComponent,
+    LeftSidebarComponent
   ],
   imports: [
     BrowserModule,
