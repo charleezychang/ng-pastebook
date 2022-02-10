@@ -13,6 +13,12 @@
     <div class="profile-picture-with-name">
         <div class="profile-name">Son Chaeyoung</div>
     </div>
+    <div class="add-friend">
+        <button id="friends-profile-header" *ngIf="status == 'Friends'">Friends</button>
+        <button id="add-friend-button" *ngIf="status == 'NotFriends'">Add Friend</button>
+        <button id="accept" *ngIf="status == 'PendingAccept'">Accept</button>
+        <button id="pending-friend-request" *ngIf="status=='PendingRequest'">Pending</button>
+    </div>
 </div>
 <div class="page">
     <div class="profile-body">
