@@ -17,6 +17,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { DatePipe } from '@angular/common';
     BrowserAnimationsModule,
     MatIconModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgxSpinnerModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

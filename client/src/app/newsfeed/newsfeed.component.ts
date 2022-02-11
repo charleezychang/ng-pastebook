@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { CurrentUserService } from '../current-user.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
   lastPost!: QueryList<ElementRef>;
 
 
-  newsfeedPosts: any;
+  newsfeedPosts: any = [];
   page: number = 1;
   isValidFileSize: boolean = true;
   newPostContent: string = '';
@@ -23,20 +24,26 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
     Username: '',
     ImageSrc: '',
   };
+  observer: any;
 
   constructor(
     private currentUserService: CurrentUserService,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private spinner: NgxSpinnerService
+    ) { }
 
   ngOnInit(): void {
     this.currentUserService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     })
     this.getNewsfeedPosts()
+    this.intersectionObserver()
   }
 
   ngAfterViewInit(): void {
-    console.log(this.newsfeedPosts);
+    this.lastPost.changes.subscribe((d) => {
+      if (d.last) this.observer.observe(d.last.nativeElement)
+    })
   }
 
   handleFileSelect(evt: any) {
@@ -60,18 +67,33 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
   }
 
   getNewsfeedPosts() {
+    this.spinner.show()
     const JWT = localStorage.getItem('JSONWebToken')
     if (JWT) {
       const httpOptions = {
         headers: new HttpHeaders({
-          'AuthToken': JWT,
-          'Page': JSON.stringify(this.page)
+          'AuthToken': JWT
         })
       };
-      this.http.get<string>("http://localhost:5000/newsfeedposts", httpOptions)
+      this.http.get<string>(`http://localhost:5000/newsfeedposts/${this.page}`, httpOptions)
         .subscribe((newsfeedPosts) => {
-          this.newsfeedPosts = newsfeedPosts
+          this.spinner.hide()
+          this.newsfeedPosts = [...this.newsfeedPosts, ...newsfeedPosts]
         })
     }
+  }
+
+  intersectionObserver() {
+    let options = {
+      root: null,
+      threshold: 0.5,
+    }
+
+    this.observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        this.page++;
+        this.getNewsfeedPosts()
+      }
+    }, options)
   }
 }
