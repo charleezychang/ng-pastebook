@@ -26,12 +26,13 @@
                 <div class="user-bio">
                     {{bio}}
                 </div>
+                <div *ngIf="status === 'Owner' || status === 'Friends'">
                     <div class="user-info">
                         <div class="user-info-details">
                             <mat-icon>email</mat-icon>
                             {{userInfo.EmailAddress}}
                         </div>
-                        <div class="user-info-details">
+                        <div class="user-info-details" *ngIf="userInfo.MobileNumber !== ''">
                             <mat-icon>contacts</mat-icon>
                             {{userInfo.MobileNumber}}
                         </div>
@@ -44,6 +45,7 @@
                             {{userInfo.Gender}}
                         </div>
                     </div>
+                </div>
             </div>
             <div class="for-sticky">
                 <div class="terms">

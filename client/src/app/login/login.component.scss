@@ -85,3 +85,6 @@
 .btn:disabled {
     opacity: 0.5;
 }
+.login-button input:disabled:hover {
+    cursor: auto;
+}
