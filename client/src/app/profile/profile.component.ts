@@ -10,7 +10,7 @@ import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit, AfterViewInit {
+export class ProfileComponent implements OnInit {
   @ViewChildren('lastPost', { read: ElementRef })
   lastPost!: QueryList<ElementRef>;
 
@@ -46,9 +46,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private currentUser: CurrentUserService) { }
-  ngAfterViewInit(): void {
-    throw new Error('Method not implemented.');
-  }
 
   ngOnInit(): void {
     this.currentUser.currentUser$.subscribe((user) => {
