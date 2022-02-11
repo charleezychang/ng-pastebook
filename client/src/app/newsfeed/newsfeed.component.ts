@@ -96,4 +96,41 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
       }
     }, options)
   }
+
+  convertTimestampToRelative(timestamp:number) {
+    let start: number = Date.now()
+    console.log("datenow" +start);
+    console.log("timestamp" + this.newsfeedPosts.Timestamp)
+    let type; // s, m, h, w
+    let timeValue;
+    const timeSecondsAgo = Math.floor((start - timestamp) / 1000)
+    if (timeSecondsAgo < 60) {
+        type = 's'
+        timeValue = (timeSecondsAgo).toString()
+        return "A few seconds ago"
+    }
+    else if (timeSecondsAgo >= 60 && timeSecondsAgo < 3600) {
+        type = 'm'
+        timeValue = (timeSecondsAgo / 60).toString().split(".")[0]
+        return timeValue + type
+    }
+    else if (timeSecondsAgo >= 3600 && timeSecondsAgo < 86400) {
+        type = 'h'
+        timeValue = (timeSecondsAgo / 60 / 60).toString().split(".")[0]
+        return timeValue + type
+    }
+    else if (timeSecondsAgo >= 86400 && timeSecondsAgo < 604800) {
+        type = 'd'
+        timeValue = (timeSecondsAgo / 60 / 60 / 24).toString().split(".")[0]
+        return timeValue + type
+    }
+    else if (timeSecondsAgo >= 604800) {
+        type = 'w'
+        timeValue = (timeSecondsAgo / 60 / 60 / 24 / 7).toString().split(".")[0]
+        return timeValue + type
+    }
+    else {
+        return "Invalid time"
+    }
+}
 }

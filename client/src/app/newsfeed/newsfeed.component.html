@@ -17,10 +17,17 @@
 </div>
 
 <div *ngFor="let post of newsfeedPosts, let i = index">
-
     <div class="post-card" *ngIf="i+1 === newsfeedPosts.length" #lastPost>
         <div class="post-header">
             <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+
+            <div>
+                <div class="profile-name">
+                    <a [routerLink]="post.Username">
+                        <p>{{post.FirstName}} {{post.LastName}}</p>
+                    </a>
+                </div>
+                <div class="timestamp-text">{{convertTimestampToRelative(post.Timestamp)}}</div>
             <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
                 <a [routerLink]="post.Username">
                     <p>{{post.FirstName}} {{post.LastName}}</p>
@@ -29,6 +36,7 @@
                 <a *ngIf="post.TargetUsername" [routerLink]="post.TargetUsername">
                     <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
                 </a>
+
             </div>
         </div>
         <div class="post-body">
@@ -44,6 +52,14 @@
     <div class="post-card" *ngIf="i+1 !== newsfeedPosts.length">
         <div class="post-header">
             <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+            <div>
+                <div class="profile-name">
+                    <a [routerLink]="post.Username">
+                        <p>{{post.FirstName}} {{post.LastName}}</p>
+                    </a>
+                </div>
+                <div class="timestamp-text">{{convertTimestampToRelative(post.Timestamp)}}</div>
+            </div>
             <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
                 <a [routerLink]="post.Username">
                     <p>{{post.FirstName}} {{post.LastName}}</p>
@@ -53,7 +69,6 @@
                     <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
                 </a>
             </div>
-
         </div>
         <div class="post-body">
             <div class="post-content">
