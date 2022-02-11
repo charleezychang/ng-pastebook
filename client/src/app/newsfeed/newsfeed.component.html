@@ -17,6 +17,7 @@
 </div>
 
 <div *ngFor="let post of newsfeedPosts, let i = index">
+    
     <div class="post-card" *ngIf="i+1 === newsfeedPosts.length" #lastPost>
         <div class="post-header">
             <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
@@ -51,3 +52,8 @@
         </div>
     </div>
 </div>
+
+<div [ngStyle]="{position: 'relative', transform: 'translateY(100px)'}" >
+    <ngx-spinner template="<img src='../../assets/loading-spinner.gif'>" [fullScreen]="false"></ngx-spinner>
+</div>
+<hr>

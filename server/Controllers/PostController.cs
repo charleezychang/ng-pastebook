@@ -89,8 +89,8 @@ public class PostController : Controller
     }
 
     [HttpGet]
-    [Route("/newsfeedposts")]
-    public IActionResult NewsFeedPosts([FromHeader(Name = "AuthToken")] string tokenString, [FromHeader(Name="Page")] int Page)
+    [Route("/newsfeedposts/{page}")]
+    public IActionResult NewsFeedPosts([FromHeader(Name = "AuthToken")] string tokenString, int Page)
     {
         System.Console.WriteLine(tokenString);
         System.Console.WriteLine(Page);
