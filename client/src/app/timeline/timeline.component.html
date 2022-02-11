@@ -1,1 +1,59 @@
-<p>timeline works!</p>
+<div class="create-post-container">
+    <div class="create-post">
+        <img class="create-post-image" [src]="currentUser.ImageSrc" />
+        <input type="text" placeholder="What's on your mind?" maxlength="1000" [(ngModel)]="newPostContent" />
+        <input type="file" value="Upload" class="hidden" id="file" accept=".png, .jpg, .jpeg .gif"
+            (change)="handleFileSelect($event)" />
+        <label for="file">Upload</label>
+        <button class="create-post-btn">Post</button>
+        <button class="create-post-btn" (click)="resetCreatePost()">Reset</button>
+    </div>
+    <div class="post-content">
+        <p [ngClass]="{'hidden':!newPostContent}" [ngStyle]="{paddingBottom: '0.5rem'}">{{newPostContent}}</p>
+    </div>
+    <div>
+        <img class="post-image" [src]="base64Image" [ngClass]="{'hidden':!base64Image}" />
+    </div>
+</div>
+
+<div *ngFor="let post of timelinePosts, let i = index">
+    
+    <div class="post-card" *ngIf="i+1 === timelinePosts.length" #lastPost>
+        <div class="post-header">
+            <a [routerLink]="['/',post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+            <a [routerLink]="['/',post.Username]">
+                <p>{{post.FirstName}} {{post.LastName}}</p>
+            </a>
+        </div>
+        <div class="post-body">
+            <div class="post-content">
+                <p>{{post.Content}}</p>
+            </div>
+            <div>
+                <img class="post-image" [src]="post.ImageSrc" />
+            </div>
+        </div>
+    </div>
+
+    <div class="post-card" *ngIf="i+1 !== timelinePosts.length">
+        <div class="post-header">
+            <a [routerLink]="['/',post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+            <a [routerLink]="['/',post.Username]">
+                <p>{{post.FirstName}} {{post.LastName}}</p>
+            </a>
+        </div>
+        <div class="post-body">
+            <div class="post-content">
+                <p>{{post.Content}}</p>
+            </div>
+            <div>
+                <img class="post-image" [src]="post.ImageSrc" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div [ngStyle]="{position: 'relative', transform: 'translateY(100px)'}" >
+    <ngx-spinner template="<img src='../../assets/loading-spinner.gif'>" [fullScreen]="false"></ngx-spinner>
+</div>
+<hr>

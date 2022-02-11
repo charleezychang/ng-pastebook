@@ -33,11 +33,14 @@ $client-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($client-theme);
 
-body {
+html {
   background-color: rgb(245,245,245);
-    min-height: 100vh;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
 }
