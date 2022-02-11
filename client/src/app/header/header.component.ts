@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CurrentUserService } from '../current-user.service';
 
 @Component({
@@ -14,7 +15,9 @@ export class HeaderComponent implements OnInit {
     ImageSrc: '',
   };
   
-  constructor(private currentUser: CurrentUserService) { }
+  constructor(
+    private currentUser: CurrentUserService,
+    private router: Router) { }
   
   ngOnInit(): void {
     this.currentUser.currentUser$.subscribe((user) => {
@@ -24,5 +27,6 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.currentUser.onLogout();
+    this.router.navigateByUrl("/");
   }
 }
