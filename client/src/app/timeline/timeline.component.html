@@ -22,14 +22,19 @@
         <div class="post-header">
             <div class="post-header">
                 <a [routerLink]="['/', post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
-                <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
-                    <a [routerLink]="['/', post.Username]">
-                        <p>{{post.FirstName}} {{post.LastName}}</p>
-                    </a>
-                    <p *ngIf="post.TargetUsername">&#9656;</p>
-                    <a *ngIf="post.TargetUsername" [routerLink]="['/', post.TargetUsername]">
-                        <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
-                    </a>
+                <div>
+                    <div class="profile-name">
+                        <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
+                            <a [routerLink]="['/', post.Username]">
+                                <p>{{post.FirstName}} {{post.LastName}}</p>
+                            </a>
+                            <p *ngIf="post.TargetUsername">&#9656;</p>
+                            <a *ngIf="post.TargetUsername" [routerLink]="['/', post.TargetUsername]">
+                                <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="timestamp-text">{{convertTimestampToRelative(post.Timestamp)}}</div>
                 </div>
             </div>
         </div>
@@ -47,14 +52,19 @@
         <div class="post-header">
             <div class="post-header">
                 <a [routerLink]="['/', post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
-                <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
-                    <a [routerLink]="['/', post.Username]">
-                        <p>{{post.FirstName}} {{post.LastName}}</p>
-                    </a>
-                    <p *ngIf="post.TargetUsername">&#9656;</p>
-                    <a *ngIf="post.TargetUsername" [routerLink]="['/', post.TargetUsername]">
-                        <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
-                    </a>
+                <div>
+                    <div class="profile-name">
+                        <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
+                            <a [routerLink]="['/', post.Username]">
+                                <p>{{post.FirstName}} {{post.LastName}}</p>
+                            </a>
+                            <p *ngIf="post.TargetUsername">&#9656;</p>
+                            <a *ngIf="post.TargetUsername" [routerLink]="['/', post.TargetUsername]">
+                                <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
+                            </a>
+                        </div>
+                        <div class="timestamp-text">{{convertTimestampToRelative(post.Timestamp)}}</div>   
+                    </div>
                 </div>
             </div>
         </div>
