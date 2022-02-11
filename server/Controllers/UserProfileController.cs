@@ -116,9 +116,9 @@ public class UserProfileController : Controller
     }
 
     [HttpGet]
-    [Route("/info")]
+    [Route("/info/{ownerId}")]
     // OwnerId here is visited profile
-    public IActionResult GetUserInfo([FromHeader(Name = "Status")] string Status, [FromHeader(Name = "OwnerId")] int OwnerId)
+    public IActionResult GetUserInfo([FromHeader(Name = "Status")] string Status, int OwnerId)
     {
         // Token and username already verified on GetUserProfile()
         // This function will return the modified details (UserController) of the user based on the url

@@ -2,11 +2,11 @@
 <div class="profile-top">
     <div class="profile-cover">
         <div class="profile-picture">
-            <img [src]="user.ImageSrc" id="uploaded-profile-pic">
+            <img [src]="profPic" id="uploaded-profile-pic">
         </div>
     </div>
     <div class="profile-picture-with-name">
-        <div class="profile-name">{{user.FirstName}} {{user.LastName}}</div>
+        <div class="profile-name">{{userInfo.FirstName}} {{userInfo.LastName}}</div>
     </div>
     <div class="add-friend">
         <button id="friends-profile-header" *ngIf="status == 'Friends'">Friends</button>
@@ -24,24 +24,24 @@
                     Intro
                 </div>
                 <div class="user-bio">
-                    Pointwest
+                    {{bio}}
                 </div>
                     <div class="user-info">
                         <div class="user-info-details">
                             <mat-icon>email</mat-icon>
-                            samplesample@gmail.com
+                            {{userInfo.EmailAddress}}
                         </div>
                         <div class="user-info-details">
                             <mat-icon>contacts</mat-icon>
-                            +639xx-xxx-xxxx
+                            {{userInfo.MobileNumber}}
                         </div>
                         <div class="user-info-details">
                             <mat-icon>cake</mat-icon>
-                            January 01, 2001
+                            {{birthday}}
                         </div>
                         <div class="user-info-details">
                             <mat-icon>wc</mat-icon>
-                            Female
+                            {{userInfo.Gender}}
                         </div>
                     </div>
             </div>

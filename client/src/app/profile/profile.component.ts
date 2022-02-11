@@ -1,16 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
 import { CurrentUserService } from '../current-user.service';
-
-interface CurrentProfileModel {
-    Status: string;
-    OwnerId: number;
-    Username: string;
-    Bio: string;
-    ImageSrc: string;
-}
+import { DatePipe } from '@angular/common';
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-profile',
@@ -26,15 +19,28 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   isValidFileSize: boolean = true;
   newPostContent: string = '';
   base64Image: string = "";
+  // current logged in user
   user = {
     FirstName: '',
     LastName: '',
     Username: '',
     ImageSrc: '',
   };
+  // current visited profile
+  userInfo = {
+    FirstName: '',
+    LastName: '',
+    EmailAddress: '',
+    Birthday: 0,
+    MobileNumber: '',
+    Gender: ''
+  }
 
   username: any;
   status: string | null = null;
+  bio: string | null = null;
+  birthday: string | null = null;
+  profPic: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,12 +51,14 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.username = this.route.snapshot.paramMap.get('username');
-    this.getStatus(this.username);
-
     this.currentUser.currentUser$.subscribe((user) => {
       this.user = user
+      console.log(user)
     })
+    this.username = this.route.snapshot.paramMap.get('username');
+    this.getUserProfile(this.username);
+
+    
 
     this.getNewsfeedPosts()
   }
@@ -59,7 +67,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     console.log(this.newsfeedPosts);
   }
 
-  getStatus(username: string) {
+  getUserProfile(username: string) {
     const JWT = localStorage.getItem('JSONWebToken')
     if(JWT) {
       const httpOptions = {
@@ -70,7 +78,28 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.http.get<any>(`http://localhost:5000/${username}`, httpOptions)
         .subscribe((res) => {
           this.status = res.Status;
-          console.log(this.status)
+          this.bio = res.Bio;
+          this.profPic = res.ImageSrc;
+          console.log(res)
+          this.getUserInfo(res.Status, res.OwnerId);
+        })
+    }
+  }
+
+  getUserInfo(status: string, ownerId: number) {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if(JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Status': status
+        })
+      };
+      this.http.get<any>(`http://localhost:5000/info/${ownerId}`, httpOptions)
+        .subscribe((res) => {
+          this.userInfo = res;
+          console.log(res);
+          const pipe = new DatePipe('en-US');
+          this.birthday = pipe.transform(this.userInfo.Birthday*1000, 'longDate')
         })
     }
   }

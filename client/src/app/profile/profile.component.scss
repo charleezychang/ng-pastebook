@@ -235,3 +235,28 @@ a:hover
 {
     text-decoration: underline;
 }
+.add-friend {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.75rem;
+}
+#add-friend-button, #friends-profile-header, #pending-friend-request, #accept {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #4267B2;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: 750;
+    border: none;
+}
+#friends-profile-header, #pending-friend-request {
+    background-color: rgb(230,230,230);
+    color: black;
+}
+#add-friend-button:hover, #accept:hover {
+    cursor: pointer;
+    background-color: #6082c5;
+}
