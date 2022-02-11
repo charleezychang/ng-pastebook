@@ -81,7 +81,7 @@ input[type="text"]:focus
 {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    // align-items: center;
     font-size: 1.2rem;
     font-weight: 500;
     gap: 1rem;
@@ -95,6 +95,13 @@ input[type="text"]:focus
     width: 3rem;
     object-fit: cover;
     border-radius: 50%;
+}
+
+.post-header-image-link
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .post-body
 {
@@ -127,6 +134,11 @@ a
 a:hover
 {
     text-decoration: underline;
+}
+
+.profile-name
+{
+    padding-top: 2px;
 }
 
 .profile-name p{
