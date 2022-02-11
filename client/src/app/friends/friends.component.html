@@ -10,18 +10,19 @@
                     <span class='text-friend'>Friends</span>
                 </div>
                 <div class='search-friend'>
-                    <input type="search" placeholder='Search' class='search-field' />
+                    <input type="text" placeholder='Search' class='search-field' [(ngModel)]="firstName" (input)="search()" />
                 </div>
             </div>
 
-            <div className='box-wrapper'>
-                <div class='friend-profile-box'>
+            <div class='box-wrapper'>
+                <div *ngFor="let friend of friends, let i = index" class='friend-profile-box'>
                     <div class='friend-profile-pic'>
-                        <a routerLink="/:username"><img class='image-sample-friend' />
+                        <a routerLink="/{{friend.Username}}"><img class='image-sample-friend' [src]="friend.ImageSrc" />
                         </a>
                     </div>
                     <div class='friend-name'>
-                        <a routerLink="/:username" class='flname-link'><span class='flname'>Hakuna Matata</span></a>
+                        <a routerLink="/{{friend.Username}}" class='flname-link'><span class='flname'>{{friend.FirstName}}
+                                {{friend.LastName}}</span></a>
                     </div>
                 </div>
             </div>
