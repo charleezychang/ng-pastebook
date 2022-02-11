@@ -5,15 +5,15 @@
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    padding: 0 2rem;
 }
 #logo-container {
-    padding-left: 2rem;
     color: white;
     cursor: pointer;
 }
 #logo-container p {
-    font-weight: 550;
-    font-size: 1.25rem;
+    font-weight: 700;
+    font-size: 1.75rem;
     letter-spacing: 0.10rem;
 }
 #navigation-container {
@@ -22,7 +22,6 @@
     align-items: center;
     justify-content: flex-end;
     gap: 2rem;
-    padding-right: 2rem;
 }
 .icon {
     display:flex;
@@ -59,3 +58,7 @@ a {
     font-size: 2rem;
 }
 
+.logout mat-icon:hover
+{
+    filter: brightness(0.85)
+}
