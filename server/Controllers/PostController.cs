@@ -268,7 +268,7 @@ public class PostController : Controller
                 ORDER BY Timestamp DESC";
                 command.Parameters.AddWithValue("@Timestamp", Timestamp);
                 command.Parameters.AddWithValue("@Timeline", CurrentUserId);
-                command.Parameters.AddWithValue("@OwnerId", CurrentUserId);
+                command.Parameters.AddWithValue("@PostOwnerId", CurrentUserId);
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {

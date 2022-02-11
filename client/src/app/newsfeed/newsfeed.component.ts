@@ -40,7 +40,7 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
     this.intersectionObserver()
     setInterval(() => {
       this.autoUpdate();
-    }, 2000)
+    }, 60000)
   }
 
   ngAfterViewInit(): void {
