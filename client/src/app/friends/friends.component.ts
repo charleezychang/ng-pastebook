@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { CurrentUserService } from '../current-user.service';
 
 export class Friend {
   constructor(
@@ -27,10 +28,11 @@ export class FriendsComponent implements OnInit {
   firstName: string = '';
   friends: Friend[] = [];
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private getCurrentUser: CurrentUserService) { }
 
   ngOnInit(): void {
     this.getFriend();
+    this.getCurrentUser.getCurrentUser()
   }
 
   getFriend() {
