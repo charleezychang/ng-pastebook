@@ -10,7 +10,7 @@ import { LoginModel } from './login.model';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
+  validCredentials: boolean = true;
   loginModelObj: LoginModel = new LoginModel();
 
   userForm = new FormGroup({
@@ -46,6 +46,11 @@ export class LoginComponent implements OnInit {
 
     this.service.postLogin(this.loginModelObj)
       .subscribe(res => {
+        if(res === 'invalid')
+        {
+          this.validCredentials = false;
+          return
+        }
         localStorage.setItem('JSONWebToken', res)
         this.currentUser.isLoggedIn$.next(true);
         this.currentUser.getCurrentUser();
