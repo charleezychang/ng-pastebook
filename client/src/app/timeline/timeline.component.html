@@ -6,7 +6,7 @@
             (change)="handleFileSelect($event)" />
         <label for="file">Upload</label>
         <button class="create-post-btn">Post</button>
-        <button class="create-post-btn" (click)="resetCreatePost()">Reset</button>
+        <button class="create-post-btn" (click)="resetCreatePost()" *ngIf="newPostContent || base64Image">Reset</button>
     </div>
     <div class="post-content">
         <p [ngClass]="{'hidden':!newPostContent}" [ngStyle]="{paddingBottom: '0.5rem'}">{{newPostContent}}</p>
@@ -17,13 +17,21 @@
 </div>
 
 <div *ngFor="let post of timelinePosts, let i = index">
-    
+
     <div class="post-card" *ngIf="i+1 === timelinePosts.length" #lastPost>
         <div class="post-header">
-            <a [routerLink]="['/',post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
-            <a [routerLink]="['/',post.Username]">
-                <p>{{post.FirstName}} {{post.LastName}}</p>
-            </a>
+            <div class="post-header">
+                <a [routerLink]="['/', post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+                <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
+                    <a [routerLink]="['/', post.Username]">
+                        <p>{{post.FirstName}} {{post.LastName}}</p>
+                    </a>
+                    <p *ngIf="post.TargetUsername">&#9656;</p>
+                    <a *ngIf="post.TargetUsername" [routerLink]="['/', post.TargetUsername]">
+                        <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="post-body">
             <div class="post-content">
@@ -37,10 +45,18 @@
 
     <div class="post-card" *ngIf="i+1 !== timelinePosts.length">
         <div class="post-header">
-            <a [routerLink]="['/',post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
-            <a [routerLink]="['/',post.Username]">
-                <p>{{post.FirstName}} {{post.LastName}}</p>
-            </a>
+            <div class="post-header">
+                <a [routerLink]="['/', post.Username]"><img class="post-header-image" [src]="post.OwnerImage" /></a>
+                <div [ngStyle]="{display: 'flex', flexDirection: 'row', gap: '0.25rem'}">
+                    <a [routerLink]="['/', post.Username]">
+                        <p>{{post.FirstName}} {{post.LastName}}</p>
+                    </a>
+                    <p *ngIf="post.TargetUsername">&#9656;</p>
+                    <a *ngIf="post.TargetUsername" [routerLink]="['/', post.TargetUsername]">
+                        <p>{{post.TargetFirstName}} {{post.TargetLastName}}</p>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="post-body">
             <div class="post-content">
@@ -53,7 +69,7 @@
     </div>
 </div>
 
-<div [ngStyle]="{position: 'relative', transform: 'translateY(100px)'}" >
+<div [ngStyle]="{position: 'relative', transform: 'translateY(100px)'}">
     <ngx-spinner template="<img src='../../assets/loading-spinner.gif'>" [fullScreen]="false"></ngx-spinner>
 </div>
 <hr>
