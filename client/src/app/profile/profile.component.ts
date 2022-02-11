@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { CurrentUserService } from '../current-user.service';
 
 interface CurrentProfileModel {
     Status: string;
@@ -16,17 +17,46 @@ interface CurrentProfileModel {
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewInit {
+  @ViewChildren('lastPost', { read: ElementRef })
+  lastPost!: QueryList<ElementRef>;
 
-  profilePic: string = "../assets/chaeyoung.jpg";
+  newsfeedPosts: any;
+  page: number = 1;
+  isValidFileSize: boolean = true;
+  newPostContent: string = '';
+  base64Image: string = "";
+  user = {
+    FirstName: '',
+    LastName: '',
+    Username: '',
+    ImageSrc: '',
+  };
+
   username: any;
   status: string | null = null;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private currentUser: CurrentUserService) { }
+  ngAfterViewInit(): void {
+    throw new Error('Method not implemented.');
+  }
 
   ngOnInit(): void {
     this.username = this.route.snapshot.paramMap.get('username');
     this.getStatus(this.username);
+
+    this.currentUser.currentUser$.subscribe((user) => {
+      this.user = user
+    })
+
+    this.getNewsfeedPosts()
+  }
+
+  gAfterViewInit(): void {
+    console.log(this.newsfeedPosts);
   }
 
   getStatus(username: string) {
@@ -45,4 +75,19 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  getNewsfeedPosts() {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT,
+          'Page': JSON.stringify(this.page)
+        })
+      };
+      this.http.get<string>("http://localhost:5000/newsfeedposts", httpOptions)
+        .subscribe((newsfeedPosts) => {
+          this.newsfeedPosts = newsfeedPosts
+        })
+    }
+  }
 }

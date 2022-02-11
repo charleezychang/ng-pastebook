@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { CurrentUserService } from '../current-user.service';
 import { FetchService } from './fetch.service';
 import { LoginModel } from './login.model';
@@ -12,8 +10,6 @@ import { LoginModel } from './login.model';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  isValidForm: boolean = false;
 
   loginModelObj: LoginModel = new LoginModel();
 
