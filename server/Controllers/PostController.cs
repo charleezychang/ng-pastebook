@@ -110,8 +110,7 @@ public class PostController : Controller
             using (var command = db.CreateCommand())
             {
                 command.CommandText = $@"SELECT Posts.Id, Posts.OwnerId, Posts.Timestamp, Posts.Timeline, Posts.Content, Posts.ImageSrc,
-                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage
-                FROM Posts
+                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage                FROM Posts
                 INNER JOIN Users ON Posts.OwnerId=Users.Id
                 INNER JOIN UserProfiles ON Posts.OwnerId=UserProfiles.OwnerId
                 WHERE Timestamp>@Timestamp AND
@@ -146,6 +145,9 @@ public class PostController : Controller
                     Post.LastName =  Convert.ToString(reader["LastName"]);
                     Post.Username =  Convert.ToString(reader["Username"]);
                     Post.OwnerImage =  Convert.ToString(reader["OwnerImage"]);
+                    Post.TargetFirstName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).FirstName;
+                    Post.TargetLastName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).LastName;
+                    Post.TargetUsername = GetTargerUser(Convert.ToInt32(reader["Timeline"])).Username;
                     NewsFeedPosts.Add(Post);
                 }
             }
@@ -222,6 +224,9 @@ public class PostController : Controller
                     Post.LastName =  Convert.ToString(reader["LastName"]);
                     Post.Username =  Convert.ToString(reader["Username"]);
                     Post.OwnerImage =  Convert.ToString(reader["OwnerImage"]);
+                    Post.TargetFirstName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).FirstName;
+                    Post.TargetLastName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).LastName;
+                    Post.TargetUsername = GetTargerUser(Convert.ToInt32(reader["Timeline"])).Username;
                     TimelinePosts.Add(Post);
                 }
             }
@@ -309,11 +314,9 @@ public class PostController : Controller
         return NumComments;
     }
 
-    [HttpGet]
-    [Route("/gettargetuser")]
-    public IActionResult GetTargerUser([FromHeader(Name = "TargetUserId")] int TargetUserId)
+    public TargetModel GetTargerUser(int TargetUserId)
     {
-        dynamic NameAndUsername = new ExpandoObject();
+        TargetModel NameAndUsername = new TargetModel();
         using (var db = Database.OpenDatabase())
         {
             using (var command = db.CreateCommand())
@@ -341,51 +344,7 @@ public class PostController : Controller
                 }
             }
         }
-        return Ok(NameAndUsername);
-    }
-
-    [HttpGet]
-    [Route("/getpostuser/{OwnerId}")]
-    public IActionResult GetPosterInfo(int OwnerId)
-    {
-        UserModel User = new UserModel();
-        using (var db = Database.OpenDatabase())
-        {
-            using (var command = db.CreateCommand())
-            {
-                command.CommandText = $@"SELECT * FROM Users WHERE Id=@Id;";
-                command.Parameters.AddWithValue("@Id", OwnerId);
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    User.FirstName = reader.GetString(2);
-                    User.LastName = reader.GetString(3);
-                }
-            }
-        }
-        return Ok(User);
-    }
-
-    [HttpGet]
-    [Route("/getpostuserprofile/{OwnerId}")]
-    public IActionResult GetPosterProfile(int OwnerId)
-    {
-        UserProfileModel UserProfile = new UserProfileModel();
-        using (var db = Database.OpenDatabase())
-        {
-            using (var command = db.CreateCommand())
-            {
-                command.CommandText = $@"SELECT * FROM UserProfiles WHERE OwnerId=@OwnerId;";
-                command.Parameters.AddWithValue("@OwnerId", OwnerId);
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    UserProfile.Username = reader.GetString(2);
-                    UserProfile.ImageSrc = reader.GetString(4);
-                }
-            }
-        }
-        return Ok(UserProfile);
+        return NameAndUsername;
     }
 
     [HttpGet]
