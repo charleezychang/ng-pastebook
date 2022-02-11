@@ -154,15 +154,15 @@ public class PostController : Controller
     }
 
     [HttpGet]
-    [Route("/timelineposts")]
-    public IActionResult TimelinePosts([FromHeader(Name = "AuthToken")] string tokenString, [FromHeader(Name = "ProfileOwner")] string ProfileOwnerUsername, [FromHeader(Name = "Page")] int Page)
+    [Route("/timelineposts/{ProfileOwnerUsername}/{page}")]
+    public IActionResult TimelinePosts([FromHeader(Name = "AuthToken")] string tokenString, string ProfileOwnerUsername, int Page)
     {
         if (Authenticate.AuthenticateToken(tokenString) != "VALID")
         {
             return Ok("invalidtoken");
         }
         int ProfileOwnerId = 0;
-        List<PostModel> TimelinePosts = new List<PostModel>();
+        dynamic TimelinePosts = new List<ExpandoObject>();
         // int CurrentUserId = Int32.Parse(Authenticate.GetOwnerIdFromToken(tokenString));
         // AddDays(-14) parses posts within the last 2 weeks
         long postsAfterThisDate = new DateTimeOffset(DateTime.Now.AddDays(-14)).ToUnixTimeMilliseconds();
@@ -186,12 +186,16 @@ public class PostController : Controller
         {
             using (var command = db.CreateCommand())
             {
-                command.CommandText = $@"SELECT * FROM Posts 
+                command.CommandText = $@"SELECT Posts.Id, Posts.OwnerId, Posts.Timestamp, Posts.Timeline, Posts.Content, Posts.ImageSrc,
+                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage
+                FROM Posts
+                INNER JOIN Users ON Posts.OwnerId=Users.Id
+                INNER JOIN UserProfiles ON Posts.OwnerId=UserProfiles.OwnerId
                 WHERE Timestamp>@Timestamp AND
                 (
-                    (OwnerId IN ({friendIdsCSV}) AND Timeline=@Timeline) OR
-                    (OwnerId=@OwnerId) OR 
-                    (OwnerId=@OwnerId AND Timeline=@Timeline)
+                    (Posts.OwnerId IN ({friendIdsCSV}) AND Posts.Timeline=@Timeline) OR
+                    (Posts.OwnerId=@OwnerId) OR 
+                    (Posts.OwnerId=@OwnerId AND Posts.Timeline=@Timeline)
                 )
                 ORDER BY Timestamp DESC
                 OFFSET @Offset ROW
@@ -203,17 +207,21 @@ public class PostController : Controller
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    PostModel Post = new PostModel();
+                    dynamic Post = new ExpandoObject();
                     // Id of post
                     Post.Id = reader.GetInt32(0);
                     // Id of post owner
-                    Post.OwnerId = reader.GetInt32(1);
-                    Post.Timestamp = reader.GetInt64(2);
-                    Post.Timeline = reader.GetInt32(3);
-                    Post.Content = reader.GetString(4);
-                    Post.ImageSrc = reader.GetString(5);
-                    Post.NumLikes = GetLikes(reader.GetInt32(0));
-                    Post.NumComments = GetComments(reader.GetInt32(0));
+                    Post.OwnerId = Convert.ToInt32(reader["OwnerId"]);
+                    Post.Timestamp = Convert.ToInt64(reader["Timestamp"]);
+                    Post.Timeline = Convert.ToInt32(reader["Timeline"]);
+                    Post.Content = Convert.ToString(reader["Content"]);
+                    Post.ImageSrc = Convert.ToString(reader["ImageSrc"]);
+                    Post.NumLikes = GetLikes(Convert.ToInt32(reader["Id"]));
+                    Post.NumComments = GetComments(Convert.ToInt32(reader["Id"]));
+                    Post.FirstName =  Convert.ToString(reader["FirstName"]);
+                    Post.LastName =  Convert.ToString(reader["LastName"]);
+                    Post.Username =  Convert.ToString(reader["Username"]);
+                    Post.OwnerImage =  Convert.ToString(reader["OwnerImage"]);
                     TimelinePosts.Add(Post);
                 }
             }

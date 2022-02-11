@@ -54,60 +54,7 @@
         </div>
         </div>
         <div class="right-side">
-            <div class="posts-section">
-                <div class="post-icon">
-                    <img src={{user.ImageSrc}} class="post-profile-pic" alt="post-profile-pic" />
-                </div>
-                <div class="post-space">
-                    <button class="post-button" >
-                        What's on your mind?
-                    </button>
-                </div>
-            </div>
-            <div class="main-posts">
-                <div class="main-post-title">Posts</div>
-            </div>
-
-            <div *ngFor="let post of newsfeedPosts, let i = index">
-                <div class="post-card" *ngIf="i+1 === newsfeedPosts.length" #lastPost>
-                    <div class="post-header">
-                        <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
-                        <a [routerLink]="post.Username">
-                            <p>{{post.FirstName}} {{post.LastName}}</p>
-                        </a>
-                    </div>
-                    <div class="post-body">
-                        <div class="post-content">
-                            <p>{{post.Content}}</p>
-                        </div>
-                        <div>
-                            <img class="post-image" [src]="post.ImageSrc" />
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="post-card" *ngIf="i+1 !== newsfeedPosts.length">
-                    <div class="post-header">
-                        <a [routerLink]="post.Username"><img class="post-header-image" [src]="post.OwnerImage" /></a>
-                        <a [routerLink]="post.Username">
-                            <p>{{post.FirstName}} {{post.LastName}}</p>
-                        </a>
-                    </div>
-                    <div class="post-body">
-                        <div class="post-content">
-                            <p>{{post.Content}}</p>
-                        </div>
-                        <div>
-                            <img class="post-image" [src]="post.ImageSrc" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class='caught-up'>
-                <div >You're all caught up.</div>
-                <div ><i>You've seen all new posts from the past 2 weeks.</i></div>
-            </div>
+            <app-timeline></app-timeline>
         </div>
     </div>
 </div> 
