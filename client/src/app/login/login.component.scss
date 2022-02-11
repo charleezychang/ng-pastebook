@@ -8,8 +8,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 97.75vh;
-    width: 99vw;
+    height: 100vh;
+    width: 100vw;
 }
 .right {
     width: 45%;
@@ -43,7 +43,6 @@
 .log-in {
     font-weight: 600;
     font-size: 1.35rem;
-    /* font-weight: bold; */
 }
 .login-header {
     display: flex;
@@ -52,10 +51,6 @@
     margin-bottom: 1rem;
     box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 1px;
 }
-// .user-form {
-    // box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 1px;
-    // padding-bottom: 1rem;
-// }
 .input-fields {
     display: flex;
     flex-direction: column;
