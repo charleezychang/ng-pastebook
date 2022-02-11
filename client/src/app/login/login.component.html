@@ -23,7 +23,7 @@
                         <div class="input-password">
                             <input type="password" placeholder="Password" name="Password" formControlName="Password" />
                             <p *ngIf="Password?.touched && Password?.invalid">
-                                <span *ngIf="Password?.errors?.['required'] || Password?.errors?.['minLength']">Password is required, it should be at least 8 characters.</span>
+                                <span *ngIf="Password?.errors?.['required'] || Password?.errors?.['minLength']">Password is required; must be at least 8 characters.</span>
                             </p>
                         </div>
                         <div class="login-button">

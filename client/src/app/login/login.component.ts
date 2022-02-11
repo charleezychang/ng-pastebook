@@ -25,16 +25,11 @@ export class LoginComponent implements OnInit {
   });
 
   constructor(
-    private formBuilder: FormBuilder,
     private service: FetchService,
     private currentUser: CurrentUserService) { }
 
   ngOnInit(): void {
     this.currentUser.checkLocalStorage();
-    this.userForm = this.formBuilder.group({
-      Email: [''],
-      Password: ['']
-    })
   }
 
   get Email() {
