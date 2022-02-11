@@ -1,6 +1,6 @@
 .profile-top {
     padding-top: 1rem;
-    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 1px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     background-color: rgb(255, 255, 255);
     padding-bottom: 1rem;
 }
@@ -13,7 +13,7 @@
     height: 10rem;
     width: 10rem;
     border-radius: 50%;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 3px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     object-fit: cover;
 }
 #uploaded-profile-pic {
@@ -63,7 +63,7 @@
             flex-direction: column;
             justify-content: center;
             border-radius: 0.5rem;
-            box-shadow: rgba(0, 0, 0, 0.18) 0px 0.75px 0.75px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
             margin-bottom: 0.5rem;
             padding: 1rem 1rem 0.5rem 1rem;
             background-color: rgb(255, 255, 255);
@@ -95,7 +95,7 @@
 }
     .terms {
         padding: 0 0.5rem;
-        font-size: 0.95vw;
+        font-size: 0.85vw;
         margin-bottom: 1rem;
     }
     .terms p {
@@ -112,7 +112,7 @@
             justify-content: center;
             border-radius: 0.5rem;
             background-color: rgb(255, 255, 255);
-            box-shadow: rgba(0, 0, 0, 0.18) 0px 0.75px 0.75px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
             padding: 1rem 1rem 1rem 1.25rem;
             margin-bottom: 1rem;
         }
@@ -121,7 +121,7 @@
             width: 2.3rem;
             border-radius: 50%;
             background-color: rgb(245,245,245);
-            box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
         }
         .post-profile-pic {
             height: 2.3rem;
@@ -148,7 +148,7 @@
     .main-posts {
         border-radius: 0.5rem;
         background-color: rgb(255, 255, 255);
-        box-shadow: rgba(0, 0, 0, 0.18) 0px 0.75px 0.75px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
         padding: 1rem 1rem 1rem 1.25rem;
         display: flex;
         margin-bottom: 1rem;
