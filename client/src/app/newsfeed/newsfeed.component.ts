@@ -38,6 +38,9 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
     })
     this.getNewsfeedPosts()
     this.intersectionObserver()
+    setInterval(() => {
+      this.autoUpdate();
+    }, 2000)
   }
 
   ngAfterViewInit(): void {
@@ -59,6 +62,22 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
       reader.readAsDataURL(file);
     }
 
+  }
+
+  autoUpdate() {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        })
+      };
+
+      this.http.get<string>(`http://localhost:5000/autoupdate/${this.newsfeedPosts[0].Timestamp}`, httpOptions)
+        .subscribe(recentPosts => {
+          this.newsfeedPosts = [...recentPosts, ...this.newsfeedPosts]
+        })
+    }
   }
 
   resetCreatePost() {
@@ -97,10 +116,47 @@ export class NewsfeedComponent implements OnInit, AfterViewInit {
     }, options)
   }
 
+  onSubmitPost() {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        })
+      };
+
+      let newPost = {
+        Timeline: 0,
+        Content: this.newPostContent,
+        ImageSrc: this.base64Image
+      }
+      this.http.post<string>(`http://localhost:5000/createpost/newsfeed`, newPost, httpOptions)
+        .subscribe(recentPost => {
+          this.newsfeedPosts = [recentPost, ...this.newsfeedPosts]
+        })
+    }
+    this.resetCreatePost()
+  }
+
+  onDeletePost(id: number, index: number) {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        }),
+        responseType: 'text' as 'json'
+      };
+
+      this.http.delete(`http://localhost:5000/posts/${id}`, httpOptions)
+        .subscribe(() => {
+          this.newsfeedPosts.splice(index, 1)
+        })
+    }
+  }
+
   convertTimestampToRelative(timestamp: number) {
     let start: number = Date.now()
-    console.log("datenow" + start);
-    console.log("timestamp" + this.newsfeedPosts.Timestamp)
     let type; // s, m, h, w
     let timeValue;
     const timeSecondsAgo = Math.floor((start - timestamp) / 1000)

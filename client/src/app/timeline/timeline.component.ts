@@ -9,7 +9,7 @@ import { CurrentUserService } from '../current-user.service';
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss']
 })
-export class TimelineComponent implements OnInit, AfterViewInit{
+export class TimelineComponent implements OnInit, AfterViewInit {
   @ViewChildren('lastPost', { read: ElementRef })
   lastPost!: QueryList<ElementRef>;
 
@@ -33,7 +33,7 @@ export class TimelineComponent implements OnInit, AfterViewInit{
     private http: HttpClient,
     private spinner: NgxSpinnerService,
     private useParams: ActivatedRoute
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.currentUserService.getCurrentUser();
@@ -41,8 +41,6 @@ export class TimelineComponent implements OnInit, AfterViewInit{
       this.currentUser = user;
     })
     this.useParams.paramMap.subscribe(paramMap => {
-      console.log(paramMap.get('username'));
-      
       this.visitedProfile = paramMap.get('username')?.toString()
     })
     this.getTimelinePosts()
@@ -106,10 +104,47 @@ export class TimelineComponent implements OnInit, AfterViewInit{
     }, options)
   }
 
+  onSubmitPost() {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        })
+      };
+
+      let newPost = {
+        Timeline: 0,
+        Content: this.newPostContent,
+        ImageSrc: this.base64Image
+      }
+      this.http.post<string>(`http://localhost:5000/createpost/${this.visitedProfile}`, newPost, httpOptions)
+        .subscribe(recentPost => {
+          this.timelinePosts = [recentPost, ...this.timelinePosts]
+        })
+    }
+    this.resetCreatePost()
+  }
+
+  onDeletePost(id: number, index: number) {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        }),
+        responseType: 'text' as 'json'
+      };
+
+      this.http.delete(`http://localhost:5000/posts/${id}`, httpOptions)
+        .subscribe(() => {
+          this.timelinePosts.splice(index, 1)
+        })
+    }
+  }
+
   convertTimestampToRelative(timestamp: number) {
     let start: number = Date.now()
-    console.log("datenow" + start);
-    console.log("timestamp" + this.timelinePosts.Timestamp)
     let type; // s, m, h, w
     let timeValue;
     const timeSecondsAgo = Math.floor((start - timestamp) / 1000)

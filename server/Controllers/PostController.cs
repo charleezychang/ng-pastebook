@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 public class PostController : Controller
 {
     [HttpPost]
-    [Route("/createpost")]
-    public IActionResult CreatePost([FromHeader(Name = "AuthToken")] string tokenString, [FromBody] PostModel Post)
+    [Route("/createpost/{visitedUsername}")]
+    public IActionResult CreatePost([FromHeader(Name = "AuthToken")] string tokenString, [FromBody] PostModel Post, string visitedUsername)
     {
         if (Authenticate.AuthenticateToken(tokenString) != "VALID")
         {
@@ -13,7 +13,28 @@ public class PostController : Controller
         }
         int OwnerId = Int32.Parse(Authenticate.GetOwnerIdFromToken(tokenString));
         long datetimePosted = new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds();
+        int visitedProfileId = 0;
 
+        if (visitedUsername != "newsfeed")
+        {
+            using (var db = Database.OpenDatabase())
+            {
+                using (var command = db.CreateCommand())
+                {
+                    command.CommandText = $@"SELECT * FROM UserProfiles WHERE Username=@Username";
+                    command.Parameters.AddWithValue("@Username", visitedUsername);
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        visitedProfileId = reader.GetInt32(1);
+                        if (visitedProfileId == OwnerId) {
+                            visitedProfileId = 0;
+                        }
+                    }
+                }
+            }
+        }
+       
         using (var db = Database.OpenDatabase())
         {
             using (var command = db.CreateCommand())
@@ -23,65 +44,49 @@ public class PostController : Controller
                 VALUES (@OwnerId, @Timestamp, @Timeline, @Content, @ImageSrc);";
                 command.Parameters.AddWithValue("@OwnerId", OwnerId);
                 command.Parameters.AddWithValue("@Timestamp", datetimePosted);
-                command.Parameters.AddWithValue("@Timeline", Post.Timeline);
+                command.Parameters.AddWithValue("@Timeline", visitedProfileId);
                 command.Parameters.AddWithValue("@Content", Post.Content);
                 command.Parameters.AddWithValue("@ImageSrc", Post.ImageSrc);
                 command.ExecuteNonQuery();
             }
         }
 
-        var postId = 0;
-
+        dynamic RecentPost = new ExpandoObject();
         using (var db = Database.OpenDatabase())
         {
             using (var command = db.CreateCommand())
             {
-                //Getting multiple data from different tables
-                command.CommandText = $@"SELECT Id FROM Posts WHERE OwnerId=@OwnerId";
-                command.Parameters.AddWithValue("@OwnerId", OwnerId);
+                command.CommandText = $@"SELECT Posts.Id, Posts.OwnerId, Posts.Timestamp, Posts.Timeline, Posts.Content, Posts.ImageSrc,
+                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage
+                From Posts
+                INNER JOIN Users ON Posts.OwnerId=Users.Id
+                INNER JOIN UserProfiles ON Posts.OwnerId=UserProfiles.OwnerId
+                WHERE Posts.OwnerId=@PostOwnerId
+                ORDER BY Timestamp DESC
+                OFFSET (0) ROWS
+                FETCH NEXT 1 ROWS ONLY;";
+                command.Parameters.AddWithValue("@PostOwnerId", OwnerId);
+                command.Parameters.AddWithValue("@Timeline", visitedProfileId);
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    postId = reader.GetInt32(0);
-                }
-            }
-        }
-
-        // Create Post action will be added to Activites table
-        using (var db = Database.OpenDatabase())
-        {
-            using (var command = db.CreateCommand())
-            {
-                command.CommandText =
-                    @"INSERT INTO Activities (OwnerId, Action, TargetId, Timestamp, State, Link)
-                    VALUES (@OwnerId, @Action, @TargetId, @Timestamp, @State, @Link);";
-                command.Parameters.AddWithValue("@OwnerId", OwnerId);
-                command.Parameters.AddWithValue("@Action", "Post");
-                command.Parameters.AddWithValue("@TargetId", Post.Timeline);
-                command.Parameters.AddWithValue("@Timestamp", datetimePosted);
-                command.Parameters.AddWithValue("@State", "Unread");
-                command.Parameters.AddWithValue("@Link", "/posts/" + postId);
-                command.ExecuteNonQuery();
-            }
-        }
-
-        PostModel RecentPost = new PostModel();
-        using (var db = Database.OpenDatabase())
-        {
-            using (var command = db.CreateCommand())
-            {
-                command.CommandText = $@"SELECT TOP 1 * FROM Posts ORDER BY Id DESC";
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    RecentPost.Id = reader.GetInt32(0);
-                    RecentPost.OwnerId = reader.GetInt32(1);
-                    RecentPost.Timestamp = reader.GetInt64(2);
-                    RecentPost.Timeline = reader.GetInt32(3);
-                    RecentPost.Content = reader.GetString(4);
-                    RecentPost.ImageSrc = reader.GetString(5);
-                    RecentPost.NumLikes = GetLikes(reader.GetInt32(0));
-                    RecentPost.NumComments = GetComments(reader.GetInt32(0));
+                    // Id of post
+                    RecentPost.Id = Convert.ToInt32(reader["Id"]);
+                    // Id of post owner
+                    RecentPost.OwnerId = Convert.ToInt32(reader["OwnerId"]);
+                    RecentPost.Timestamp = Convert.ToInt64(reader["Timestamp"]);
+                    RecentPost.Timeline = Convert.ToInt32(reader["Timeline"]);
+                    RecentPost.Content = Convert.ToString(reader["Content"]);
+                    RecentPost.ImageSrc = Convert.ToString(reader["ImageSrc"]);
+                    RecentPost.NumLikes = GetLikes(Convert.ToInt32(reader["Id"]));
+                    RecentPost.NumComments = GetComments(Convert.ToInt32(reader["Id"]));
+                    RecentPost.FirstName = Convert.ToString(reader["FirstName"]);
+                    RecentPost.LastName = Convert.ToString(reader["LastName"]);
+                    RecentPost.Username = Convert.ToString(reader["Username"]);
+                    RecentPost.OwnerImage = Convert.ToString(reader["OwnerImage"]);
+                    RecentPost.TargetFirstName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).FirstName;
+                    RecentPost.TargetLastName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).LastName;
+                    RecentPost.TargetUsername = GetTargerUser(Convert.ToInt32(reader["Timeline"])).Username;
                 }
             }
         }
@@ -92,8 +97,6 @@ public class PostController : Controller
     [Route("/newsfeedposts/{page}")]
     public IActionResult NewsFeedPosts([FromHeader(Name = "AuthToken")] string tokenString, int Page)
     {
-        System.Console.WriteLine(tokenString);
-        System.Console.WriteLine(Page);
         if (Authenticate.AuthenticateToken(tokenString) != "VALID")
         {
             return Ok("invalidtoken");
@@ -110,7 +113,7 @@ public class PostController : Controller
             using (var command = db.CreateCommand())
             {
                 command.CommandText = $@"SELECT Posts.Id, Posts.OwnerId, Posts.Timestamp, Posts.Timeline, Posts.Content, Posts.ImageSrc,
-                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage                FROM Posts
+                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage FROM Posts
                 INNER JOIN Users ON Posts.OwnerId=Users.Id
                 INNER JOIN UserProfiles ON Posts.OwnerId=UserProfiles.OwnerId
                 WHERE Timestamp>@Timestamp AND
@@ -141,10 +144,10 @@ public class PostController : Controller
                     Post.ImageSrc = Convert.ToString(reader["ImageSrc"]);
                     Post.NumLikes = GetLikes(Convert.ToInt32(reader["Id"]));
                     Post.NumComments = GetComments(Convert.ToInt32(reader["Id"]));
-                    Post.FirstName =  Convert.ToString(reader["FirstName"]);
-                    Post.LastName =  Convert.ToString(reader["LastName"]);
-                    Post.Username =  Convert.ToString(reader["Username"]);
-                    Post.OwnerImage =  Convert.ToString(reader["OwnerImage"]);
+                    Post.FirstName = Convert.ToString(reader["FirstName"]);
+                    Post.LastName = Convert.ToString(reader["LastName"]);
+                    Post.Username = Convert.ToString(reader["Username"]);
+                    Post.OwnerImage = Convert.ToString(reader["OwnerImage"]);
                     Post.TargetFirstName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).FirstName;
                     Post.TargetLastName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).LastName;
                     Post.TargetUsername = GetTargerUser(Convert.ToInt32(reader["Timeline"])).Username;
@@ -220,10 +223,10 @@ public class PostController : Controller
                     Post.ImageSrc = Convert.ToString(reader["ImageSrc"]);
                     Post.NumLikes = GetLikes(Convert.ToInt32(reader["Id"]));
                     Post.NumComments = GetComments(Convert.ToInt32(reader["Id"]));
-                    Post.FirstName =  Convert.ToString(reader["FirstName"]);
-                    Post.LastName =  Convert.ToString(reader["LastName"]);
-                    Post.Username =  Convert.ToString(reader["Username"]);
-                    Post.OwnerImage =  Convert.ToString(reader["OwnerImage"]);
+                    Post.FirstName = Convert.ToString(reader["FirstName"]);
+                    Post.LastName = Convert.ToString(reader["LastName"]);
+                    Post.Username = Convert.ToString(reader["Username"]);
+                    Post.OwnerImage = Convert.ToString(reader["OwnerImage"]);
                     Post.TargetFirstName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).FirstName;
                     Post.TargetLastName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).LastName;
                     Post.TargetUsername = GetTargerUser(Convert.ToInt32(reader["Timeline"])).Username;
@@ -235,14 +238,14 @@ public class PostController : Controller
     }
 
     [HttpGet]
-    [Route("/autoupdate")]
-    public IActionResult AutoUpdate([FromHeader(Name = "AuthToken")] string tokenString, [FromHeader(Name = "Timestamp")] long Timestamp)
+    [Route("/autoupdate/{Timestamp}")]
+    public IActionResult AutoUpdate([FromHeader(Name = "AuthToken")] string tokenString, long Timestamp)
     {
         if (Authenticate.AuthenticateToken(tokenString) != "VALID")
         {
             return Ok("invalidtoken");
         }
-        List<PostModel> NewPosts = new List<PostModel>();
+        dynamic NewsFeedPosts = new List<ExpandoObject>();
         int CurrentUserId = Int32.Parse(Authenticate.GetOwnerIdFromToken(tokenString));
         // firendIdsCSV will return a CSV of friends' ids
         string friendIdsCSV = String.Join(",", GetFriends(tokenString, 0));
@@ -251,37 +254,47 @@ public class PostController : Controller
         {
             using (var command = db.CreateCommand())
             {
-                command.CommandText = $@"SELECT * FROM Posts 
+                command.CommandText = $@"SELECT Posts.Id, Posts.OwnerId, Posts.Timestamp, Posts.Timeline, Posts.Content, Posts.ImageSrc,
+                Users.FirstName as FirstName, Users.LastName as LastName, UserProfiles.Username as Username, UserProfiles.ImageSrc as OwnerImage FROM Posts
+                INNER JOIN Users ON Posts.OwnerId=Users.Id
+                INNER JOIN UserProfiles ON Posts.OwnerId=UserProfiles.OwnerId
                 WHERE Timestamp>@Timestamp AND
                 (
-                    (OwnerId IN ({friendIdsCSV}) AND Timeline=0) OR
-                    (OwnerId IN ({friendIdsCSV}) AND Timeline=@Timeline) OR
-                    (OwnerId=@OwnerId) OR 
-                    (OwnerId=@OwnerId AND Timeline=@Timeline)
+                    (Posts.OwnerId IN ({friendIdsCSV}) AND Posts.Timeline=0) OR
+                    (Posts.OwnerId IN ({friendIdsCSV}) AND Posts.Timeline=@Timeline) OR
+                    (Posts.OwnerId=@PostOwnerId) OR 
+                    (Posts.OwnerId=@PostOwnerId AND Posts.Timeline=@Timeline)
                 )
-                ORDER BY Timestamp DESC;";
+                ORDER BY Timestamp DESC";
                 command.Parameters.AddWithValue("@Timestamp", Timestamp);
                 command.Parameters.AddWithValue("@Timeline", CurrentUserId);
                 command.Parameters.AddWithValue("@OwnerId", CurrentUserId);
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    PostModel Post = new PostModel();
+                   dynamic Post = new ExpandoObject();
                     // Id of post
-                    Post.Id = reader.GetInt32(0);
+                    Post.Id = Convert.ToInt32(reader["Id"]);
                     // Id of post owner
-                    Post.OwnerId = reader.GetInt32(1);
-                    Post.Timestamp = reader.GetInt64(2);
-                    Post.Timeline = reader.GetInt32(3);
-                    Post.Content = reader.GetString(4);
-                    Post.ImageSrc = reader.GetString(5);
-                    Post.NumLikes = GetLikes(reader.GetInt32(0));
-                    Post.NumComments = GetComments(reader.GetInt32(0));
-                    NewPosts.Add(Post);
+                    Post.OwnerId = Convert.ToInt32(reader["OwnerId"]);
+                    Post.Timestamp = Convert.ToInt64(reader["Timestamp"]);
+                    Post.Timeline = Convert.ToInt32(reader["Timeline"]);
+                    Post.Content = Convert.ToString(reader["Content"]);
+                    Post.ImageSrc = Convert.ToString(reader["ImageSrc"]);
+                    Post.NumLikes = GetLikes(Convert.ToInt32(reader["Id"]));
+                    Post.NumComments = GetComments(Convert.ToInt32(reader["Id"]));
+                    Post.FirstName = Convert.ToString(reader["FirstName"]);
+                    Post.LastName = Convert.ToString(reader["LastName"]);
+                    Post.Username = Convert.ToString(reader["Username"]);
+                    Post.OwnerImage = Convert.ToString(reader["OwnerImage"]);
+                    Post.TargetFirstName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).FirstName;
+                    Post.TargetLastName = GetTargerUser(Convert.ToInt32(reader["Timeline"])).LastName;
+                    Post.TargetUsername = GetTargerUser(Convert.ToInt32(reader["Timeline"])).Username;
+                    NewsFeedPosts.Add(Post);
                 }
             }
         }
-        return Ok(NewPosts);
+        return Ok(NewsFeedPosts);
     }
 
     private int GetLikes(int PostId)
