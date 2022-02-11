@@ -53,12 +53,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.currentUser.currentUser$.subscribe((user) => {
       this.user = user
-      console.log(user)
     })
     this.username = this.route.snapshot.paramMap.get('username');
     this.getUserProfile(this.username);
-
-    
 
     this.getNewsfeedPosts()
   }
@@ -80,7 +77,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           this.status = res.Status;
           this.bio = res.Bio;
           this.profPic = res.ImageSrc;
-          console.log(res)
           this.getUserInfo(res.Status, res.OwnerId);
         })
     }
@@ -97,7 +93,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.http.get<any>(`http://localhost:5000/info/${ownerId}`, httpOptions)
         .subscribe((res) => {
           this.userInfo = res;
-          console.log(res);
           const pipe = new DatePipe('en-US');
           this.birthday = pipe.transform(this.userInfo.Birthday*1000, 'longDate')
         })
@@ -116,6 +111,36 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       this.http.get<string>("http://localhost:5000/newsfeedposts", httpOptions)
         .subscribe((newsfeedPosts) => {
           this.newsfeedPosts = newsfeedPosts
+        })
+    }
+  }
+
+  addFriend() {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        }),
+      };
+      this.http.post<any>(`http://localhost:5000/request/${this.username}`, null, httpOptions)
+        .subscribe((res) => {
+          this.status = 'PendingRequest';
+        })
+    }
+  }
+
+  acceptRequest() {
+    const JWT = localStorage.getItem('JSONWebToken')
+    if (JWT) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'AuthToken': JWT
+        }),
+      };
+      this.http.post<any>(`http://localhost:5000/accept/${this.username}`, null, httpOptions)
+        .subscribe((res) => {
+          this.status = 'Friends';
         })
     }
   }
